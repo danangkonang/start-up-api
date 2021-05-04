@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "startup",
+    "username": "danang",
+    "password": "danang",
+    "database": "dua_tiga_paskal",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "operatorsAliases": false
@@ -16,10 +16,11 @@
     "operatorsAliases": false
   },
   "production": {
-    "username": "pubsnorydyzcms",
-    "password": "4b47fc2934f224abb7a62e0092d29a00f8d8103572e33eff744f9a445cdf7c75",
-    "database": "d1gv2j20u0jes2",
-    "host": "ec2-54-225-195-3.compute-1.amazonaws.com",
-    "dialect": "postgres"
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": false
   }
 }

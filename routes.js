@@ -1,16 +1,39 @@
-const express = require('express')
-const bodyParser = require('body-parser')
+const express = require('express');
+require('express-group-routes');
 
-const app = express()
-app.use(bodyParser.json())
+const app = express();
+const parser = require('body-parser');
 
-const controllerJob = require('./controllers/Job')
-const controllerJobCategorie = require('./controllers/JobCategorie')
+app.use(parser.json());
 
-app.get('/', (req, res) => res.send('Hello rest api danang konang'))
-app.get('/jobs',controllerJob.index)
-app.get('/job-categori',controllerJobCategorie.index)
-// app.get('/products',controllerProduct.show)
-// app.post('/product',controllerProduct.store)
+const usersContraller = require('./controllers/userContraller');
+// const controllerJobCategorie = require('./controllers/JobCategorie');
+
+// const auth = (req, res, next) => {
+//   const bearerHeader = req.headers.authorization;
+//   if (typeof bearerHeader !== 'undefined') {
+//     const bearer = bearerHeader.split(' ');
+//     const bearerToken = bearer[1];
+//     req.token = bearerToken;
+//     next();
+//   } else {
+//     res.sendStatus(404);
+//   }
+// };
+
+// function response(res, status, message, data) {
+//   res.json({ status, message, data });
+// }
+app.get('/', (req, res) => res.json({ message: 'Hello rest api danang konang' }));
+app.group('/api/v1', (router) => {
+  router.get('/', (req, res) => res.json({ message: 'Hello rest api danang konang' }));
+  // router.get('/tes', (req, res) => response(res, 200, 'success', {}));
+  router.get('/tes', usersContraller.index);
+  // router.get('/users', auth, usersContraller.index);
+  router.get('/users', usersContraller.index);
+  router.get('/user', usersContraller.findUserById);
+  router.post('/user', usersContraller.createOneUser);
+  // router.get('/job-categori', controllerJobCategorie.index);
+});
 
 module.exports = app;
