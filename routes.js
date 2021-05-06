@@ -1,10 +1,43 @@
 const express = require('express');
 require('express-group-routes');
+const cors = require('cors');
+const multer = require('multer');
+const path = require('path');
 
 const app = express();
-const parser = require('body-parser');
+const bodyParser = require('body-parser');
+const stringUnix = require('./helper');
 
-app.use(parser.json());
+const singgle = multer.diskStorage({
+  destination: './public/avatar',
+  filename(req, file, cb) {
+    cb(null, `${stringUnix()}${path.extname(file.originalname)}`);
+  },
+});
+
+const multyple = multer({
+  destination: './public/images',
+  filename(req, file, cb) {
+    cb(null, `${stringUnix()}${path.extname(file.originalname)}`);
+  },
+});
+
+const singgleUpload = multer({ storage: singgle });
+const multypleUpload = multer({ storage: multyple });
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(express.static('public'));
+
+app.use(bodyParser.json());
+app.use(cors(
+  {
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  },
+));
 
 const usersContraller = require('./controllers/userContraller');
 // const controllerJobCategorie = require('./controllers/JobCategorie');
@@ -24,7 +57,9 @@ const usersContraller = require('./controllers/userContraller');
 // function response(res, status, message, data) {
 //   res.json({ status, message, data });
 // }
-app.get('/', (req, res) => res.json({ message: 'Hello rest api danang konang' }));
+
+// app.get('/', (req, res) => res.json({ message: 'Hello rest api danang konang' }));
+app.get('/', (req, res) => res.json({ message: stringUnix() }));
 app.group('/api/v1', (router) => {
   router.get('/', (req, res) => res.json({ message: 'Hello rest api danang konang' }));
   // router.get('/tes', (req, res) => response(res, 200, 'success', {}));
@@ -34,6 +69,18 @@ app.group('/api/v1', (router) => {
   router.get('/user', usersContraller.findUserById);
   router.post('/user', usersContraller.createOneUser);
   // router.get('/job-categori', controllerJobCategorie.index);
+  router.post('/upload', singgleUpload.single('avatar'), (req, res) => {
+    console.log(req.file);
+    console.log(req.body.title);
+    // console.log(singgleUpload.);
+    res.json({ message: 'Hello rest api danang konang' });
+  });
+  router.post('/uploads', multypleUpload.array('avatar', 5), (req, res) => {
+    console.log(req.file);
+    console.log(req.body.title);
+    res.json({ message: 'Hello rest api danang konang' });
+  });
+  router.post('/singup', usersContraller.registrasiUser);
 });
 
 module.exports = app;
