@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const models = require('../models/index');
+const helper = require('../helper');
 
 const saltRounds = 10;
 
@@ -100,31 +101,33 @@ exports.createOneUser = (req, res) => {
   });
 };
 
-const findUserByEmail = (email) => {
-  models.user.findOne({
-    attributes: [
-      'name',
-      'password',
-      'email',
-      'role',
-      'token',
-      'active',
-      'createdAt',
-      'updatedAt',
-    ],
-    where: {
-      email,
-    },
-  }).then((respon) => respon);
-};
-
 exports.registrasiUser = (req, res) => {
   const { email, password } = req.body;
-  const response = findUserByEmail(email);
-  if (response !== null) {
-    res.status(200).json({
-      status: 200,
-      message: 'email alrady used',
+  if (email === undefined) {
+    res.status(400).json({
+      status: 400,
+      message: 'required email',
+    });
+    return;
+  }
+  if (password === undefined) {
+    res.status(400).json({
+      status: 400,
+      message: 'password email',
+    });
+    return;
+  }
+  if (!helper.validEmail(email)) {
+    res.status(400).json({
+      status: 400,
+      message: 'please use valid email address',
+    });
+    return;
+  }
+  if (!helper.strongPass(password)) {
+    res.status(400).json({
+      status: 400,
+      message: 'please use strong password',
     });
     return;
   }
@@ -144,7 +147,77 @@ exports.registrasiUser = (req, res) => {
           });
         });
       })
-        .catch((error) => res.send(error));
+        .catch((error) => {
+          res.status(400).json({
+            status: 400,
+            message: error.parent.sqlMessage,
+          });
+        });
+    });
+  });
+};
+
+exports.loginUser = (req, res) => {
+  const { email, password } = req.body;
+  if (email === undefined) {
+    res.status(400).json({
+      status: 400,
+      message: 'email required',
+    });
+    return;
+  }
+  if (password === undefined) {
+    res.status(400).json({
+      status: 400,
+      message: 'password required',
+    });
+    return;
+  }
+  models.user.findOne({
+    attributes: [
+      'name',
+      'password',
+      'email',
+      'role',
+      'token',
+      'active',
+      'createdAt',
+      'updatedAt',
+    ],
+    where: {
+      email,
+    },
+  }).then((respon) => {
+    const passwordHansed = respon.dataValues.password;
+    const { role } = respon.dataValues;
+    bcrypt.compare(password, passwordHansed, (error, respose) => {
+      if (!respose || error) {
+        res.status(400).json({
+          status: 400,
+          message: 'wrong password',
+        });
+        return;
+      }
+      // create token
+      jwt.sign({ email, role }, 'secret_key', (err, token) => {
+        res.status(200).json({
+          status: 200,
+          message: 'success',
+          data: {
+            name: respon.dataValues.name,
+            email: respon.dataValues.email,
+            role: respon.dataValues.role,
+            token,
+            expired: '',
+            createdAt: respon.dataValues.createdAt,
+          },
+        });
+      });
+    });
+  }).catch((error) => {
+    res.status(400).json({
+      status: 400,
+      message: error,
     });
   });
 };

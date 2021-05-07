@@ -6,19 +6,19 @@ const path = require('path');
 
 const app = express();
 const bodyParser = require('body-parser');
-const stringUnix = require('./helper');
+const helper = require('./helper');
 
 const singgle = multer.diskStorage({
   destination: './public/avatar',
   filename(req, file, cb) {
-    cb(null, `${stringUnix()}${path.extname(file.originalname)}`);
+    cb(null, `${helper.stringUnix()}${path.extname(file.originalname)}`);
   },
 });
 
 const multyple = multer({
   destination: './public/images',
   filename(req, file, cb) {
-    cb(null, `${stringUnix()}${path.extname(file.originalname)}`);
+    cb(null, `${helper.stringUnix()}${path.extname(file.originalname)}`);
   },
 });
 
@@ -59,7 +59,7 @@ const usersContraller = require('./controllers/userContraller');
 // }
 
 // app.get('/', (req, res) => res.json({ message: 'Hello rest api danang konang' }));
-app.get('/', (req, res) => res.json({ message: stringUnix() }));
+app.get('/', (req, res) => res.json({ message: helper.stringUnix() }));
 app.group('/api/v1', (router) => {
   router.get('/', (req, res) => res.json({ message: 'Hello rest api danang konang' }));
   // router.get('/tes', (req, res) => response(res, 200, 'success', {}));
@@ -81,6 +81,7 @@ app.group('/api/v1', (router) => {
     res.json({ message: 'Hello rest api danang konang' });
   });
   router.post('/singup', usersContraller.registrasiUser);
+  router.post('/login', usersContraller.loginUser);
 });
 
 module.exports = app;

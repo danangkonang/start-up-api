@@ -7,6 +7,16 @@
     "dialect": "mysql",
     "operatorsAliases": false
   },
+  "pg_development": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "dua_tiga_paskal",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "protocol": "postgres",
+    "dialect": "postgres",
+    "operatorsAliases": 0
+  },
   "test": {
     "username": "root",
     "password": null,
