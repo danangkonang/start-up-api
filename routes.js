@@ -40,6 +40,9 @@ app.use(cors(
 ));
 
 const usersContraller = require('./controllers/userContraller');
+const domainsController = require('./controllers/domainsController');
+const type = require('./controllers/typeInformationsController');
+const information = require('./controllers/informationsController');
 // const controllerJobCategorie = require('./controllers/JobCategorie');
 
 // const auth = (req, res, next) => {
@@ -82,6 +85,18 @@ app.group('/api/v1', (router) => {
   });
   router.post('/singup', usersContraller.registrasiUser);
   router.post('/login', usersContraller.loginUser);
+
+  /* Domain */
+  router.get('/domains', domainsController.index);
+  router.post('/domain', domainsController.createOneDomain);
+
+  /* Type Information */
+  router.get('/type-informations', type.index);
+  router.post('/type-information', type.createOneType);
+
+  /* Information */
+  router.get('/informations', information.index);
+  router.post('/information', information.createOneInformation);
 });
 
 module.exports = app;

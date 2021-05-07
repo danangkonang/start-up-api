@@ -7,10 +7,10 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    type: {
+    type_target: {
       type: Sequelize.STRING,
     },
-    domain: {
+    domain_target: {
       type: Sequelize.STRING,
     },
     title: {
@@ -34,10 +34,10 @@ module.exports = {
     promo: {
       type: Sequelize.STRING,
     },
-    promoFrom: {
+    promo_from: {
       type: Sequelize.DATE,
     },
-    promoTo: {
+    promo_to: {
       type: Sequelize.DATE,
     },
     createdAt: {

@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
 module.exports = (sequelize, DataTypes) => {
-  const sosmed = sequelize.define('sosmed', {
-    domain: DataTypes.STRING,
+  const mediaSocial = sequelize.define('mediaSocial', {
+    domain_target: DataTypes.STRING,
     name: DataTypes.STRING,
     image: DataTypes.STRING,
     link: DataTypes.STRING,
   }, {});
-  sosmed.associate = function (models) {
+  mediaSocial.associate = function (models) {
     // associations can be defined here
   };
-  return sosmed;
+  return mediaSocial;
 };

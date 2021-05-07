@@ -1,15 +1,17 @@
 /* eslint-disable no-unused-vars */
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('domains', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('type_informations', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
+    domain_target: {
+      type: Sequelize.STRING,
+    },
     name: {
       type: Sequelize.STRING,
-      unique: true,
     },
     createdAt: {
       allowNull: false,
@@ -20,5 +22,5 @@ module.exports = {
       type: Sequelize.DATE,
     },
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('domains'),
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('type_informations'),
 };

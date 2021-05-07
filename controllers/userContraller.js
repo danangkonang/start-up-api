@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const models = require('../models/index');
+const models = require('../models');
 const helper = require('../helper');
 
 const saltRounds = 10;
@@ -15,7 +15,10 @@ exports.index = (req, res) => {
       });
     })
     .catch((error) => {
-      res.status(400).send(error);
+      res.status(400).json({
+        status: 400,
+        message: error,
+      });
     });
 };
 
@@ -137,12 +140,17 @@ exports.registrasiUser = (req, res) => {
         email,
         password: hash,
         role: 'user',
+        active: false,
       }).then((user) => {
-        jwt.sign({ email }, 'secret_key', (errToken, token) => {
+        const { role, active, id } = user;
+        jwt.sign({
+          email, role, active, id,
+        }, 'secret_key', (errToken, token) => {
           res.status(200).json({
-            id: user.id,
+            id,
             email: user.email,
-            role: user.role,
+            role,
+            active,
             token,
           });
         });
@@ -189,7 +197,7 @@ exports.loginUser = (req, res) => {
     },
   }).then((respon) => {
     const passwordHansed = respon.dataValues.password;
-    const { role } = respon.dataValues;
+    const { role, active, id } = respon.dataValues;
     bcrypt.compare(password, passwordHansed, (error, respose) => {
       if (!respose || error) {
         res.status(400).json({
@@ -199,7 +207,9 @@ exports.loginUser = (req, res) => {
         return;
       }
       // create token
-      jwt.sign({ email, role }, 'secret_key', (err, token) => {
+      jwt.sign({
+        email, role, active, id,
+      }, 'secret_key', (err, token) => {
         res.status(200).json({
           status: 200,
           message: 'success',

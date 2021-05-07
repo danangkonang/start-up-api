@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 module.exports = (sequelize, DataTypes) => {
   const information = sequelize.define('information', {
-    type: DataTypes.STRING,
-    domain: DataTypes.STRING,
+    type_target: DataTypes.STRING,
+    domain_target: DataTypes.STRING,
     title: DataTypes.STRING,
     description: DataTypes.TEXT,
     images: DataTypes.STRING,
@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     phone: DataTypes.STRING,
     email: DataTypes.STRING,
     promo: DataTypes.STRING,
-    promoFrom: DataTypes.DATE,
-    promoTo: DataTypes.DATE,
+    promo_from: DataTypes.DATE,
+    promo_to: DataTypes.DATE,
   }, {});
   information.associate = function (models) {
     // associations can be defined here

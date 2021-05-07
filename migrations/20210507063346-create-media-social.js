@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('sosmeds', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('media_socials', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    domain: {
+    domain_target: {
       type: Sequelize.STRING,
     },
     name: {
@@ -28,5 +28,5 @@ module.exports = {
       type: Sequelize.DATE,
     },
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('sosmeds'),
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('media_socials'),
 };
