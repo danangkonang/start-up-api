@@ -15,7 +15,7 @@ const singgle = multer.diskStorage({
   },
 });
 
-const multyple = multer({
+const multyple = multer.diskStorage({
   destination: './public/images',
   filename(req, file, cb) {
     cb(null, `${helper.stringUnix()}${path.extname(file.originalname)}`);
@@ -41,7 +41,7 @@ app.use(cors(
 
 const usersContraller = require('./controllers/userContraller');
 const domainsController = require('./controllers/domainsController');
-const type = require('./controllers/typeInformationsController');
+const type = require('./controllers/typeController');
 const information = require('./controllers/informationsController');
 // const controllerJobCategorie = require('./controllers/JobCategorie');
 
@@ -75,7 +75,6 @@ app.group('/api/v1', (router) => {
   router.post('/upload', singgleUpload.single('avatar'), (req, res) => {
     console.log(req.file);
     console.log(req.body.title);
-    // console.log(singgleUpload.);
     res.json({ message: 'Hello rest api danang konang' });
   });
   router.post('/uploads', multypleUpload.array('avatar', 5), (req, res) => {
@@ -90,13 +89,13 @@ app.group('/api/v1', (router) => {
   router.get('/domains', domainsController.index);
   router.post('/domain', domainsController.createOneDomain);
 
-  /* Type Information */
-  router.get('/type-informations', type.index);
-  router.post('/type-information', type.createOneType);
+  /* Type */
+  router.get('/types', type.index);
+  router.post('/type', type.createOneType);
 
   /* Information */
   router.get('/informations', information.index);
-  router.post('/information', information.createOneInformation);
+  router.post('/information', multypleUpload.array('avatar', 5), information.createOneInformation);
 });
 
 module.exports = app;

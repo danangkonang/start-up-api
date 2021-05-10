@@ -37,7 +37,7 @@ exports.createOneType = (req, res) => {
     });
     return;
   }
-  models.type_information.create(
+  models.type.create(
     req.body, {
       returning: [
         'id',
