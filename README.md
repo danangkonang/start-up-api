@@ -20,3 +20,8 @@ $ npx sequelize-cli db:seed:all
 $ npx sequelize-cli db:seed:undo:all
 
 ```
+phpmyadmin
+http://localhost:9001/
+
+api
+http://localhost:9000/

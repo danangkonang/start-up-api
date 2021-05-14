@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "danang",
-    "password": "danang",
+    "username": "dananguser",
+    "password": "danangpass",
     "database": "dua_tiga_paskal",
-    "host": "127.0.0.1",
+    "host": "danang-mysql-app",
     "dialect": "mysql",
     "operatorsAliases": false
   },
@@ -26,8 +26,8 @@
     "operatorsAliases": false
   },
   "production": {
-    "username": "root",
-    "password": null,
+    "username": "dananguser",
+    "password": "danangpass",
     "database": "database_production",
     "host": "127.0.0.1",
     "dialect": "mysql",
