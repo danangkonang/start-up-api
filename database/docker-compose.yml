@@ -1,0 +1,55 @@
+version: "3.9"
+services:
+  
+  mysql:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+    networks:
+      - backend
+    environment:
+      - MYSQL_ROOT_PASSWORD=dananguser
+      - MYSQL_USER=dananguser
+      - MYSQL_PASSWORD=danangpass 
+      - MYSQL_DATABASE=dua_tiga_paskal
+    container_name: danang-mysql-app
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:4.7
+    depends_on:
+      - mysql
+    networks:
+      - backend
+    ports:
+      - "9001:80"
+    environment:
+      - PMA_HOST=danang-mysql-app
+      - PMA_PORT= 3306
+    volumes:
+      - /sessionss
+    container_name: danang-phpmyadmin-app
+  # express:
+  #   depends_on: 
+  #     - mysql
+  #   # entrypoint: ["/bin/bash", "./entrypoint.sh"]
+  #   build: .
+  #   command: bash -c 'while !</dev/tcp/db/3306; do sleep 1; done; npm start'
+  #   networks:
+  #     # - frontend
+  #     - backend
+  #   environment:
+  #     - MYSQL_HOST=danang-mysql-app
+  #     - MYSQL_USER=dananguser
+  #     - MYSQL_PASS=danangpass
+  #     - MYSQL_DB=dua_tiga_paskal
+  #   # volumes:
+  #   #   - ./www/:/var/www/html/
+  #   ports:
+  #     - "9000:9000"
+  #   container_name: danang-express-app
+networks:
+  # frontend:
+  backend:

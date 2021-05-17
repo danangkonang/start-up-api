@@ -1,8 +1,9 @@
 # First Template To Make Rest Api Using Express.js
 
+## notes for developer
 ```bash
 # create migration
-$ npx sequelize-cli model:generate --name user --attributes name:string,active:boolean
+$ npx sequelize-cli model:generate --name user --attributes name:string
 
 # running migration
 $ npx sequelize-cli db:migrate
@@ -20,8 +21,22 @@ $ npx sequelize-cli db:seed:all
 $ npx sequelize-cli db:seed:undo:all
 
 ```
-phpmyadmin
-http://localhost:9001/
 
-api
-http://localhost:9000/
+## how to deploy this
+```bash
+$ docker-compose up --build -d
+```
+
+## now you can visit this address
+1. Rest Api [http://localhost:9000/](http://localhost:9000/)
+
+2. PhpMyAdmin [http://localhost:9001/](http://localhost:9001/)
+
+## only first deploy or developing
+```bash
+$ docker exec -it danang-express-app bash
+$ npx sequelize db:migrate
+
+# optional
+$ npx sequelize-cli db:seed:all
+```

@@ -12,11 +12,13 @@ services:
     networks:
       - backend
     environment:
-      - MYSQL_ROOT_PASSWORD=dananguser
-      - MYSQL_USER=dananguser
-      - MYSQL_PASSWORD=danangpass 
+      - MYSQL_ROOT_PASSWORD=paskaluser
+      - MYSQL_USER=paskaluser
+      - MYSQL_PASSWORD=p45kal23 
       - MYSQL_DATABASE=dua_tiga_paskal
-    container_name: danang-mysql-app
+    volumes: 
+      - /23_paskal_mysql:/var/lib/mysql
+    container_name: paskal-mysql-app
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:4.7
     depends_on:
@@ -26,30 +28,27 @@ services:
     ports:
       - "9001:80"
     environment:
-      - PMA_HOST=danang-mysql-app
+      - PMA_HOST=paskal-mysql-app
       - PMA_PORT= 3306
     volumes:
       - /sessionss
-    container_name: danang-phpmyadmin-app
+    container_name: paskal-phpmyadmin-app
   express:
     depends_on: 
       - mysql
-    # entrypoint: ["/bin/bash", "./entrypoint.sh"]
     build: .
-    command: bash -c 'while !</dev/tcp/db/3306; do sleep 1; done; npm start'
+    # command: bash -c 'while !</dev/tcp/db/3306; do sleep 1; done; npx sequelize db:migrate; npm start'
     networks:
-      # - frontend
       - backend
     environment:
-      - MYSQL_HOST=danang-mysql-app
-      - MYSQL_USER=dananguser
-      - MYSQL_PASS=danangpass
+      - MYSQL_HOST=paskal-mysql-app
+      - MYSQL_USER=paskaluser
+      - MYSQL_PASS=p45kal23
       - MYSQL_DB=dua_tiga_paskal
     # volumes:
     #   - ./www/:/var/www/html/
     ports:
       - "9000:9000"
-    container_name: danang-express-app
+    container_name: paskal-express-app
 networks:
-  # frontend:
   backend:

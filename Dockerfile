@@ -22,4 +22,4 @@ EXPOSE 9000
 # CMD ./entrypoint.sh
 # CMD /bin/bash ./entrypoint.sh 127.0.0.1:3306
 
-# CMD [ "node", "app.js" ]
+CMD [ "node", "app.js" ]

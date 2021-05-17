@@ -5,7 +5,7 @@
     "database": "dua_tiga_paskal",
     "host": "danang-mysql-app",
     "dialect": "mysql",
-    "operatorsAliases": false
+    "operatorsAliases": 1
   },
   "pg_development": {
     "username": "postgres",
