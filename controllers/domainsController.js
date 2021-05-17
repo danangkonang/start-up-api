@@ -44,9 +44,12 @@ exports.createOneDomain = (req, res) => {
       data: result,
     });
   }).catch((error) => {
-    res.status(200).json({
-      status: 200,
-      message: error,
+    const e = error.errors.map((list) => ({
+      value: list.message,
+    }));
+    res.status(400).json({
+      status: 400,
+      message: e,
     });
   });
 };

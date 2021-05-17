@@ -1,15 +1,15 @@
-// function strongPass(pass) {
-//   return /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,}$/.test(pass);
-// }
+// const bcrypt = require('bcrypt');
+require('dotenv').config();
+// const saltRounds = 10;
 
-// console.log(strongPass('qwert@A2'));
+// const createPass = (pass) => {
+//   bcrypt.genSalt(saltRounds, (err, salt) => {
+//     bcrypt.hash(pass, salt, (errHash, hash) => {
+//       console.log(errHash);
+//       console.log(hash);
+//     });
+//   });
+// };
+// createPass('pass');
 
-console.log(process.env.HOME);
-
-const Sequelize = require('sequelize');
-
-const sequelize = new Sequelize('dua_tiga_paskal', 'dananguser', 'danangpass', {
-  host: 'danang-mysql-app',
-  dialect: 'mysql',
-});
-console.log(sequelize);
+console.log(process.env);

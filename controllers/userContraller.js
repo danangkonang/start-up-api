@@ -145,13 +145,19 @@ exports.registrasiUser = (req, res) => {
         const { role, active, id } = user;
         jwt.sign({
           email, role, active, id,
-        }, 'secret_key', (errToken, token) => {
+        }, 'secret_key', { expiresIn: 60 * 60 }, (errToken, token) => {
           res.status(200).json({
-            id,
-            email: user.email,
-            role,
-            active,
-            token,
+            status: 200,
+            message: 'success',
+            data: {
+              id,
+              name: user.name,
+              email: user.email,
+              role: user.role,
+              token,
+              expired: 60 * 60,
+              createdAt: user.createdAt,
+            },
           });
         });
       })
@@ -167,6 +173,7 @@ exports.registrasiUser = (req, res) => {
 
 exports.loginUser = (req, res) => {
   const { email, password } = req.body;
+  console.log(email);
   if (email === undefined) {
     res.status(400).json({
       status: 400,
@@ -209,7 +216,7 @@ exports.loginUser = (req, res) => {
       // create token
       jwt.sign({
         email, role, active, id,
-      }, 'secret_key', (err, token) => {
+      }, 'secret_key', { expiresIn: 60 * 60 }, (err, token) => {
         res.status(200).json({
           status: 200,
           message: 'success',
@@ -218,7 +225,7 @@ exports.loginUser = (req, res) => {
             email: respon.dataValues.email,
             role: respon.dataValues.role,
             token,
-            expired: '',
+            expired: 60 * 60,
             createdAt: respon.dataValues.createdAt,
           },
         });

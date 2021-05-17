@@ -8,7 +8,7 @@ exports.index = (req, res) => {
   if (page === undefined) {
     res.status(400).json({
       status: 400,
-      message: 'param "id" required',
+      message: 'param "page" required',
     });
     return;
   }

@@ -1,5 +1,5 @@
 /* eslint-disable no-plusplus */
-const conn = require('../config/db');
+// const conn = require('../config/db');
 
 function makeid(length) {
   const result = [];
@@ -28,17 +28,17 @@ function strongPass(pass) {
   return /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,}$/.test(pass);
 }
 
-function findByEmail(email) {
-  // console.log('di sini', conn.);
-  conn.query(`SELECT email FROM users WHERE email = ${email} LIMIT 1`, (err, rows) => {
-    if (err) {
-      return err;
-    }
-    console.log('hasil', rows);
-    return rows;
-  });
-}
+// function findByEmail(email) {
+//   // console.log('di sini', conn.);
+//   conn.query(`SELECT email FROM users WHERE email = ${email} LIMIT 1`, (err, rows) => {
+//     if (err) {
+//       return err;
+//     }
+//     console.log('hasil', rows);
+//     return rows;
+//   });
+// }
 
 module.exports = {
-  stringUnix, validEmail, strongPass, findByEmail,
+  stringUnix, validEmail, strongPass,
 };

@@ -12,5 +12,6 @@ module.exports = {
   },
   rules: {
     // properties: 'never',
+    // 'no-unused-vars': true,
   },
 };
