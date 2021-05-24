@@ -9,7 +9,7 @@ $ npx sequelize-cli model:generate --name user --attributes name:string
 $ npx sequelize-cli db:migrate
 
 # delete migrations
-$ npx sequelize-cli db:migrate:undo
+$ npx sequelize-cli db:migrate:undo:all
 
 # create seeder
 $ npx sequelize-cli seed:generate --name demo-user
@@ -39,4 +39,8 @@ $ npx sequelize db:migrate
 
 # optional
 $ npx sequelize-cli db:seed:all
+```
+
+```bash
+$ npx sequelize-cli db:migrate --env production
 ```
