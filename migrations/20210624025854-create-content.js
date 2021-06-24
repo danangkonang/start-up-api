@@ -1,22 +1,13 @@
 /* eslint-disable no-unused-vars */
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('media_socials', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('contents', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    domain_target: {
-      type: Sequelize.STRING,
-    },
     name: {
-      type: Sequelize.STRING,
-    },
-    image: {
-      type: Sequelize.STRING,
-    },
-    link: {
       type: Sequelize.STRING,
     },
     createdAt: {
@@ -28,5 +19,5 @@ module.exports = {
       type: Sequelize.DATE,
     },
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('media_socials'),
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('contents'),
 };

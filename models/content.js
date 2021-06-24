@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-vars */
 module.exports = (sequelize, DataTypes) => {
-  const type = sequelize.define('type', {
-    domain_target: DataTypes.STRING,
+  const content = sequelize.define('content', {
     name: DataTypes.STRING,
   }, {});
-  type.associate = function (models) {
+  content.associate = function (models) {
     // associations can be defined here
   };
-  return type;
+  return content;
 };
