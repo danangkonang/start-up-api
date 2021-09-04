@@ -2,131 +2,10 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const models = require('../models');
 const helper = require('../helper');
-
 const saltRounds = 10;
 
-exports.index = (req, res) => {
-  models.user.findAll()
-    .then((respon) => {
-      res.status(200).json({
-        status: 200,
-        message: 'success',
-        data: respon,
-      });
-    })
-    .catch((error) => {
-      res.status(400).json({
-        status: 400,
-        message: error,
-      });
-    });
-};
-
-exports.findUserById = (req, res) => {
-  const { id } = req.query;
-  if (id === undefined) {
-    res.status(400).json({
-      status: 400,
-      message: 'param "id" required',
-    });
-    return;
-  }
-  models.user.findOne({
-    attributes: [
-      'name',
-      'password',
-      'email',
-      'role',
-      'token',
-      'active',
-      'createdAt',
-      'updatedAt',
-    ],
-    where: {
-      id,
-    },
-  }).then((respon) => {
-    res.status(200).json({
-      status: 200,
-      message: 'success',
-      data: respon,
-    });
-  });
-};
-
-exports.createOneUser = (req, res) => {
-  const {
-    name,
-    password,
-    email,
-  } = req.body;
-  if (name === undefined) {
-    res.status(400).json({
-      status: 400,
-      message: 'nama required',
-    });
-    return;
-  }
-  if (password === undefined) {
-    res.status(400).json({
-      status: 400,
-      message: 'password required',
-    });
-    return;
-  }
-  if (email === undefined) {
-    res.status(400).json({
-      status: 400,
-      message: 'email required',
-    });
-    return;
-  }
-  models.user.bulkCreate(
-    req.body, {
-      returning: [
-        'id',
-        'name',
-        'password',
-        'email',
-        'role',
-        'token',
-        'active',
-        'createdAt',
-        'updatedAt',
-      ],
-    },
-  ).then((result) => {
-    res.status(200).json({
-      status: 200,
-      message: 'success',
-      data: result,
-    });
-  });
-};
-
-exports.registrasiUser = (req, res) => {
+exports.registrasiUser = async (req, res) => {
   const { email, password } = req.body;
-  if (email === undefined) {
-    res.status(400).json({
-      status: 400,
-      message: 'required email',
-    });
-    return;
-  }
-  if (password === undefined) {
-    res.status(400).json({
-      status: 400,
-      message: 'password email',
-    });
-    return;
-  }
-  if (!helper.validEmail(email)) {
-    res.status(400).json({
-      status: 400,
-      message: 'please use valid email address',
-    });
-    return;
-  }
   if (!helper.strongPass(password)) {
     res.status(400).json({
       status: 400,
@@ -134,107 +13,108 @@ exports.registrasiUser = (req, res) => {
     });
     return;
   }
-  bcrypt.genSalt(saltRounds, (err, salt) => {
-    bcrypt.hash(password, salt, (errHash, hash) => {
-      models.user.create({
-        email,
-        password: hash,
-        role: 'user',
-        active: false,
-      }).then((user) => {
-        const { role, active, id } = user;
+  try {
+    bcrypt.genSalt(saltRounds, (err, salt) => {
+      bcrypt.hash(password, salt, async (errHash, hash) => {
+        let user_count = await  models.user.count({
+          where: {
+            email,
+          },
+        });
+        if (user_count > 0) {
+          return res.status(500).json({
+            status: 500,
+            message: 'Duplicate Email',
+          });
+        }
+        let user_respon = await  models.user.create({
+          email,
+          password: hash,
+          role: 'user',
+          active: false,
+        });
         jwt.sign({
-          email, role, active, id,
-        }, 'secret_key', { expiresIn: 60 * 60 }, (errToken, token) => {
+          id: user_respon.id,
+        }, process.env.SECRET_KEY, { expiresIn: 60 * 60 }, (err, token) => {
+          if (err) {
+            return res.status(500).json({
+              status: 500,
+              message: 'Internal Server Error',
+            });
+          }
           res.status(200).json({
             status: 200,
             message: 'success',
-            data: {
-              id,
-              name: user.name,
-              email: user.email,
-              role: user.role,
-              token,
-              expired: 60 * 60,
-              createdAt: user.createdAt,
-            },
+            data: createResponse(user_respon, token)
           });
-        });
-      })
-        .catch((error) => {
-          res.status(400).json({
-            status: 400,
-            message: error.parent.sqlMessage,
-          });
-        });
-    });
-  });
-};
-
-exports.loginUser = (req, res) => {
-  const { email, password } = req.body;
-  console.log(email);
-  if (email === undefined) {
-    res.status(400).json({
-      status: 400,
-      message: 'email required',
-    });
-    return;
-  }
-  if (password === undefined) {
-    res.status(400).json({
-      status: 400,
-      message: 'password required',
-    });
-    return;
-  }
-  models.user.findOne({
-    attributes: [
-      'name',
-      'password',
-      'email',
-      'role',
-      'token',
-      'active',
-      'createdAt',
-      'updatedAt',
-    ],
-    where: {
-      email,
-    },
-  }).then((respon) => {
-    const passwordHansed = respon.dataValues.password;
-    const { role, active, id } = respon.dataValues;
-    bcrypt.compare(password, passwordHansed, (error, respose) => {
-      if (!respose || error) {
-        res.status(400).json({
-          status: 400,
-          message: 'wrong password',
-        });
-        return;
-      }
-      // create token
-      jwt.sign({
-        email, role, active, id,
-      }, 'secret_key', { expiresIn: 60 * 60 }, (err, token) => {
-        res.status(200).json({
-          status: 200,
-          message: 'success',
-          data: {
-            name: respon.dataValues.name,
-            email: respon.dataValues.email,
-            role: respon.dataValues.role,
-            token,
-            expired: 60 * 60,
-            createdAt: respon.dataValues.createdAt,
-          },
         });
       });
     });
-  }).catch((error) => {
-    res.status(400).json({
-      status: 400,
-      message: error,
+  } catch (err) {
+    res.status(500).json({
+      status: 500,
+      message: 'Internal Server Error',
     });
-  });
+  }
+};
+
+exports.loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    let user_respon = await  models.user.findOne({
+      where: {
+        email,
+      },
+    });
+    if (user_respon === null) {
+      return res.status(400).json({
+        status: 400,
+        message: 'Email Not Found',
+      });
+    }
+    bcrypt.compare(password, user_respon.password, (error, ok) => {
+      console.log(error);
+      console.log(ok);
+      if (!ok || error) {
+        res.status(400).json({
+          status: 400,
+          message: 'wrong Password',
+        });
+        return;
+      }
+      jwt.sign({
+        id: user_respon.id,
+      }, process.env.SECRET_KEY, { expiresIn: 60 * 60 }, (err, token) => {
+        if (err) {
+          return res.status(500).json({
+            status: 500,
+            message: 'Internal Server Error',
+          });
+        }
+        res.status(200).json({
+          status: 200,
+          message: 'success',
+          data: createResponse(user_respon, token)
+        });
+      });
+    })
+  } catch (err) {
+    res.status(500).json({
+      status: 500,
+      message: 'Internal Server Error',
+    });
+  }
+  
+  
+};
+
+const createResponse = (data, token) => {
+  return {
+    name: data.name,
+    email: data.email,
+    role: data.role,
+    token,
+    expired: 60 * 60,
+    createdAt: data.createdAt,
+  }
 };

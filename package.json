@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@danangkonang/js-validation": "^0.1.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "dotenv": "^9.0.0",

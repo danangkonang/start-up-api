@@ -30,21 +30,21 @@ services:
     volumes:
       - /sessionss
     container_name: phpmyadmin-app
-  # express:
-  #   depends_on: 
-  #     - mysql
-  #   build: .
-  #   networks:
-  #     - backend
-  #   environment:
-  #     - MYSQL_HOST=mysql-app
-  #     - MYSQL_USER=root
-  #     - MYSQL_PASS=root
-  #     - MYSQL_DB=default
-  #   volumes:
-  #     - ./express-files:/app/public/images
-  #   ports:
-  #     - "9000:9000"
-  #   container_name: express-app
+  express:
+    depends_on: 
+      - mysql
+    build: .
+    networks:
+      - backend
+    environment:
+      - MYSQL_HOST=mysql-app
+      - MYSQL_USER=root
+      - MYSQL_PASS=root
+      - MYSQL_DB=default
+    volumes:
+      - ./express-files:/app/public/images
+    ports:
+      - "9000:9000"
+    container_name: express-app
 networks:
   backend:

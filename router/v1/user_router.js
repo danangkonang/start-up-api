@@ -1,14 +1,9 @@
 const router = require('express').Router();
-// const user = require('../../controllers/user_contraller');
+const user = require('../../controllers/user_contraller');
+const validate = require('../../validation/user_validation');
 // const auth = require('../../midleware');
 
-router.get('/', (req, res) => {
-  return res.status(200).json({
-    message: "pong"
-  })
-})
-// router.get('/users', auth, user.index);
-// router.post('/registrasi', user.registrasiUser);
-// router.post('/login', user.loginUser);
+router.post('/user/registrasi', validate.simple, user.registrasiUser);
+router.post('/user/login', validate.simple, user.loginUser);
 
 module.exports = router;

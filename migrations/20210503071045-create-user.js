@@ -23,7 +23,7 @@ module.exports = {
     token: {
       type: Sequelize.STRING,
     },
-    active: {
+    is_active: {
       type: Sequelize.BOOLEAN,
     },
     createdAt: {

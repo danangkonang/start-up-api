@@ -1,10 +1,16 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+const port = 9000;
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.status(200).json({
+    message: "pong"
+  })
 })
+app.use(require('./router'))
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
