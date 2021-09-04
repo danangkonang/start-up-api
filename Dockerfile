@@ -1,15 +1,17 @@
-FROM node:14
+FROM node:lts-alpine3.12
+
+ENV NODE_ENV=production
 
 WORKDIR /app
  
-COPY package*.json ./
+# COPY package*.json ./
 
-RUN npm install -g npm
+# RUN npm install -g npm && npm ci --only=production
 
-RUN npm install
- 
-COPY . .
+# COPY . .
+
+COPY dist .
  
 EXPOSE 9000
 
-CMD [ "node", "app.js" ]
+CMD [ "node", "main.js" ]
