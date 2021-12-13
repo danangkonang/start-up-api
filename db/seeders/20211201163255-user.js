@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-const fake_user = [...Array(1)].map((ft, x) => (
+const fakeUser = [...Array(1)].map((ft, x) => (
   {
     name: 'super admin',
     // // testing123
@@ -15,7 +15,7 @@ const fake_user = [...Array(1)].map((ft, x) => (
 ));
 
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.bulkInsert('users', fake_user),
+  up: (queryInterface, Sequelize) => queryInterface.bulkInsert('users', fakeUser),
 
   down: (queryInterface, Sequelize) => queryInterface.bulkDelete('users', null, {}),
 };

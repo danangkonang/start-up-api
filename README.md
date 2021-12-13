@@ -12,7 +12,7 @@ $ npx sequelize-cli db:migrate
 $ npx sequelize-cli db:migrate:undo:all
 
 # create seeder
-$ npx sequelize-cli seed:generate --name demo-user
+$ npx sequelize-cli seed:generate --name user
 
 # runing seeder
 $ npx sequelize-cli db:seed:all
